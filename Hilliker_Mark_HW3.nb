@@ -1,0 +1,451 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 8.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     18537,        442]
+NotebookOptionsPosition[     17913,        415]
+NotebookOutlinePosition[     18253,        430]
+CellTagsIndexPosition[     18210,        427]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["\<\
+Mark Hilliker
+CSE 477, G. Farin
+Assignment III Bezier patch interpolation
+due: 10-28, midnight \
+\>", "Subtitle",
+ CellChangeTimes->{{3.5243333915071344`*^9, 3.524333406436717*^9}, {
+   3.5575202711872745`*^9, 3.557520276943785*^9}, {3.631909218568988*^9, 
+   3.631909243682951*^9}, 3.6339903850385637`*^9, {3.6339904704019136`*^9, 
+   3.6339905033959713`*^9}, {3.6371573481582565`*^9, 
+   3.6371573686566925`*^9}, {3.6371574157375755`*^9, 3.6371574174223785`*^9}, 
+   3.6371770037753696`*^9, {3.6371792381158237`*^9, 3.6371792477722406`*^9}, {
+   3.6380356796650295`*^9, 3.638035680569812*^9}, {3.6543821413547134`*^9, 
+   3.654382145524952*^9}, {3.65507226382699*^9, 3.6550722686854115`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Turn in via Blackboard
+Name your file lastname_firstname_HW3.nb
+\
+\>", "Subsection",
+ CellChangeTimes->{{3.631878426375361*^9, 3.631878534109702*^9}, 
+   3.637157428155197*^9}],
+
+Cell[TextData[{
+ "\[LineSeparator]Create a rectilinear array of data points ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["p", "ij"], TraditionalForm]]],
+ ", read off from a part of a sphere.\n\nRecall a point ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["p", "ij"], TraditionalForm]]],
+ " on a sphere is given by\n\n\t",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"(", GridBox[{
+      {
+       RowBox[{
+        StyleBox["cos",
+         FontSlant->"Italic"], " ", 
+        SubscriptBox[
+         RowBox[{"s", " "}], "i"], 
+        StyleBox["sin",
+         FontSlant->"Italic"], " ", 
+        SubscriptBox["t", "j"]}]},
+      {
+       RowBox[{
+        StyleBox["sin",
+         FontSlant->"Italic"], " ", 
+        SubscriptBox["s", "i"], " ", 
+        StyleBox["sin",
+         FontSlant->"Italic"], 
+        StyleBox[" ",
+         FontSlant->"Italic"], 
+        SubscriptBox["t", "j"]}]},
+      {
+       RowBox[{
+        StyleBox["cos",
+         FontSlant->"Italic"], " ", 
+        SubscriptBox["t", "j"]}]}
+     }], ")"}], TraditionalForm]]],
+ "\n\t\nfor parameter value (",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox[
+    RowBox[{"s", " "}], "i"], TraditionalForm]]],
+ ", ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["t", "j"], TraditionalForm]]],
+ "). Let  0  \[LessSlantEqual]  ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox[
+    RowBox[{"s", " "}], "i"], TraditionalForm]]],
+ ", ",
+ Cell[BoxData[
+  FormBox[
+   SubscriptBox["t", "j"], TraditionalForm]]],
+ "  \[LessEqual] \[DoubledPi]/8. Build a 4x4 \
+\[OpenCurlyDoubleQuote]rectangular\[CloseCurlyDoubleQuote] array of points \n\
+on the sphere and compute the bicubc Bezier surface defined by that control \
+mesh.\n\nFor extra credit: modify the given control mesh to somethin else \
+interesting.\n\t\n\t"
+}], "Text",
+ CellChangeTimes->{{3.5243334148297324`*^9, 3.524333600412091*^9}, {
+   3.5243338349953055`*^9, 3.5243339777701664`*^9}, {3.5243351752959795`*^9, 
+   3.524335177807644*^9}, 3.524335632738115*^9, {3.557520280953062*^9, 
+   3.5575203228242674`*^9}, {3.5575203530264482`*^9, 
+   3.5575205063773174`*^9}, {3.5575205450598173`*^9, 3.557520645431504*^9}, {
+   3.5575206873024406`*^9, 3.557520707130295*^9}, {3.5575207592973633`*^9, 
+   3.557520844100051*^9}, 3.557520946009762*^9, {3.557521020531917*^9, 
+   3.557521097877709*^9}, {3.5575211473771434`*^9, 3.557521215986823*^9}, {
+   3.5575213841725793`*^9, 3.5575213848277874`*^9}, {3.557523181376424*^9, 
+   3.5575231850268707`*^9}, {3.6316511237840624`*^9, 3.631651126872868*^9}, {
+   3.631651165781336*^9, 3.63165118009296*^9}, {3.6316512611879287`*^9, 
+   3.6316512812807636`*^9}, {3.631651374742094*^9, 3.6316513989384484`*^9}, {
+   3.6316514361950254`*^9, 3.631651442559837*^9}, {3.6316515152820587`*^9, 
+   3.6316515193536654`*^9}, {3.6316516585945415`*^9, 3.631651703634448*^9}, {
+   3.6316517756008887`*^9, 3.631651783965728*^9}, {3.631651964151415*^9, 
+   3.6316519680670214`*^9}, {3.6319091723487597`*^9, 3.631909174673164*^9}, 
+   3.6319092160788755`*^9, {3.631909251327764*^9, 3.631909256569373*^9}, 
+   3.631909293049865*^9, {3.631909398035103*^9, 3.631909453549754*^9}, {
+   3.6319880857826195`*^9, 3.6319880865314245`*^9}, {3.6339905299784184`*^9, 
+   3.63399053100802*^9}, {3.633990565749281*^9, 3.633990727349965*^9}, {
+   3.6339907690488377`*^9, 3.6339908155837193`*^9}, 3.633990847204975*^9, {
+   3.6339924215787196`*^9, 3.6339924501735697`*^9}, {3.6339924946648483`*^9, 
+   3.6339925678445764`*^9}, {3.6339926172342634`*^9, 3.633992638590701*^9}, {
+   3.633992730911663*^9, 3.633992920763996*^9}, {3.6339929555520573`*^9, 
+   3.6339930022273397`*^9}, 3.6371574367040124`*^9, {3.6371574735960784`*^9, 
+   3.637157476825284*^9}, {3.6371575077757387`*^9, 3.637157657832402*^9}, {
+   3.637157689438058*^9, 3.637157749561764*^9}, {3.6371581406000566`*^9, 
+   3.637158144952464*^9}, {3.6371582100669785`*^9, 3.637158328502386*^9}, 
+   3.6371584460549936`*^9, {3.6371774796542053`*^9, 3.6371775188414745`*^9}, 
+   3.6371775993064156`*^9, {3.637177655981315*^9, 3.637177662018526*^9}, {
+   3.6371777231082335`*^9, 3.637177831294423*^9}, {3.6371778964769535`*^9, 
+   3.6371779068665714`*^9}, {3.6371780228832884`*^9, 3.637178090150606*^9}, {
+   3.6371781372002892`*^9, 3.6371782022524033`*^9}, {3.6371782480384836`*^9, 
+   3.637178584552676*^9}, 3.637178718322911*^9, {3.6371787484153633`*^9, 
+   3.637178815386281*^9}, {3.637179090976365*^9, 3.637179177150917*^9}, {
+   3.6380356911717253`*^9, 3.6380357293697023`*^9}, 3.6543818949366193`*^9, {
+   3.6543820015677185`*^9, 3.654382115344226*^9}},
+ FontFamily->"Arial",
+ FontSize->18],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"points", " ", "=", " ", 
+   RowBox[{"Table", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Cos", "[", "s", "]"}], "*", 
+        RowBox[{"Sin", "[", "t", "]"}]}], ",", 
+       RowBox[{
+        RowBox[{"Sin", "[", "s", "]"}], "*", 
+        RowBox[{"Sin", "[", "t", "]"}]}], ",", 
+       RowBox[{"Cos", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"s", ",", "0", ",", 
+       RowBox[{"Pi", "/", "8"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"Pi", "/", "8"}], ")"}], "/", "3"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"t", ",", "0", ",", 
+       RowBox[{"Pi", "/", "8"}], ",", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"Pi", "/", "8"}], ")"}], "/", "3"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"spline", " ", "=", " ", 
+   RowBox[{"BSplineSurface", "[", "points", "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"plot", "     ", "=", " ", 
+  RowBox[{"Graphics3D", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Opacity", "[", "0.9", "]"}], ",", "Green", ",", "spline"}], 
+    "}"}], "]"}]}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.6550712794544315`*^9, 3.655071368722039*^9}, {
+   3.655071461053505*^9, 3.6550715126816397`*^9}, {3.6550715652340746`*^9, 
+   3.655071604865656*^9}, {3.655071710173829*^9, 3.6550717154937954`*^9}, 
+   3.655071757222248*^9, {3.655071903503667*^9, 3.6550719454137077`*^9}, {
+   3.655071981990734*^9, 3.6550720012390904`*^9}, {3.6550722774680533`*^9, 
+   3.655072281309578*^9}, {3.6550725622567997`*^9, 3.6550725897714763`*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[
+  {RGBColor[0, 1, 0], Opacity[0.9], 
+   BSplineSurface3DBox[
+    NCache[{{{0, 0, 1}, {
+       Sin[Rational[1, 24] Pi], 0, Cos[Rational[1, 24] Pi]}, {
+       Rational[1, 2] 2^Rational[-1, 2] (-1 + 3^Rational[1, 2]), 0, 
+        Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2])}, {
+       Sin[Rational[1, 8] Pi], 0, Cos[Rational[1, 8] Pi]}}, {{0, 0, 1}, {
+       Cos[Rational[1, 24] Pi] Sin[Rational[1, 24] Pi], 
+        Sin[Rational[1, 24] Pi]^2, Cos[Rational[1, 24] Pi]}, {
+       Rational[1, 2] 2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) 
+        Cos[Rational[1, 24] Pi], Rational[1, 2] 
+        2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[1, 24] Pi], 
+        Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2])}, {
+       Cos[Rational[1, 24] Pi] Sin[Rational[1, 8] Pi], 
+        Sin[Rational[1, 24] Pi] Sin[Rational[1, 8] Pi], Cos[
+        Rational[1, 8] Pi]}}, {{0, 0, 1}, {
+       Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2]) 
+        Sin[Rational[1, 24] Pi], Rational[1, 2] 
+        2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[1, 24] Pi], 
+        Cos[Rational[1, 24] Pi]}, {
+       Rational[1, 8] (-1 + 3^Rational[1, 2]) (1 + 3^Rational[1, 2]), 
+        Rational[1, 8] (-1 + 3^Rational[1, 2])^2, Rational[1, 2] 
+        2^Rational[-1, 2] (1 + 3^Rational[1, 2])}, {
+       Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2]) 
+        Sin[Rational[1, 8] Pi], Rational[1, 2] 
+        2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[1, 8] Pi], Cos[
+        Rational[1, 8] Pi]}}, {{0, 0, 1}, {
+       Cos[Rational[1, 8] Pi] Sin[Rational[1, 24] Pi], 
+        Sin[Rational[1, 24] Pi] Sin[Rational[1, 8] Pi], Cos[
+        Rational[1, 24] Pi]}, {
+       Rational[1, 2] 2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) 
+        Cos[Rational[1, 8] Pi], Rational[1, 2] 
+        2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[1, 8] Pi], 
+        Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2])}, {
+       Cos[Rational[1, 8] Pi] Sin[Rational[1, 8] Pi], 
+        Sin[Rational[1, 8] Pi]^2, Cos[Rational[1, 8] Pi]}}}, {{{0, 0, 1}, {
+       0.13052619222005157`, 0, 0.9914448613738104}, {
+       0.2588190451025207, 0, 0.9659258262890682}, {
+       0.3826834323650898, 0, 0.9238795325112867}}, {{0, 0, 1}, {
+       0.12940952255126037`, 0.01703708685546585, 0.9914448613738104}, {
+       0.25660481229257065`, 0.033782664431261815`, 0.9659258262890682}, {
+       0.37940952255126037`, 0.049950211252314816`, 0.9238795325112867}}, {{0,
+        0, 1}, {0.12607862007251905`, 0.033782664431261815`, 
+       0.9914448613738104}, {0.24999999999999994`, 0.06698729810778066, 
+       0.9659258262890682}, {0.3696438106143861, 0.0990457605412876, 
+       0.9238795325112867}}, {{0, 0, 1}, {0.1205904774487396, 
+       0.049950211252314816`, 0.9914448613738104}, {0.23911761839433446`, 
+       0.0990457605412876, 0.9659258262890682}, {0.3535533905932738, 
+       0.14644660940672624`, 0.9238795325112867}}}]]},
+  ImageSize->{346.6908180552236, 154.5712201878171},
+  ViewPoint->{1.4707226781193377`, -2.646825036565102, 1.5103946603049274`},
+  ViewVertical->{0.42141704495464727`, -0.01036482430328121, 
+   4.559084449015685}]], "Output",
+ CellChangeTimes->{
+  3.6550715280110207`*^9, {3.655071596237482*^9, 3.6550716058141065`*^9}, 
+   3.6550717163844624`*^9, 3.6550717576553683`*^9, 3.655071910530312*^9, 
+   3.6550719464147396`*^9, {3.6550719860692654`*^9, 3.655072002145368*^9}, 
+   3.6550722824658775`*^9, {3.6550725745087433`*^9, 3.655072590240239*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", 
+   RowBox[{"Extra", " ", 
+    RowBox[{"Credit", ":", " ", 
+     RowBox[{
+     "Halloween", " ", "theme", " ", "applied", " ", "to", " ", "original", 
+      " ", 
+      RowBox[{"surface", "."}]}]}]}], " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"p1", " ", "=", " ", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Cos", "[", "s", "]"}], "*", 
+          RowBox[{"Sin", "[", "t", "]"}]}], ",", 
+         RowBox[{
+          RowBox[{"Sin", "[", "s", "]"}], "*", 
+          RowBox[{"Sin", "[", "t", "]"}]}], ",", 
+         RowBox[{"Cos", "[", "t", "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"s", ",", "0", ",", 
+         RowBox[{"Pi", "/", "8"}], ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Pi", "/", "8"}], ")"}], "/", "3"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", "0", ",", 
+         RowBox[{"Pi", "/", "16"}], ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Pi", "/", "8"}], ")"}], "/", "3"}]}], "}"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"p2", "=", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Cos", "[", "s", "]"}], "*", 
+          RowBox[{"Sin", "[", "t", "]"}]}], ",", 
+         RowBox[{
+          RowBox[{"Sin", "[", "s", "]"}], "*", 
+          RowBox[{"Sin", "[", "t", "]"}]}], ",", 
+         RowBox[{"Cos", "[", "t", "]"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"s", ",", "0", ",", 
+         RowBox[{"Pi", "/", "8"}], ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Pi", "/", "8"}], ")"}], "/", "3"}]}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"t", ",", 
+         RowBox[{"Pi", "/", "16"}], ",", 
+         RowBox[{"Pi", "/", "8"}], ",", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"Pi", "/", "8"}], ")"}], "/", "3"}]}], "}"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"s1", " ", "=", " ", 
+     RowBox[{"BSplineSurface", "[", "p1", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"s2", " ", "=", " ", 
+     RowBox[{"BSplineSurface", "[", "p2", "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"P1", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Opacity", "[", "0.9", "]"}], ",", "Orange", ",", "s1"}], 
+       "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"P2", " ", "=", " ", 
+     RowBox[{"Graphics3D", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Opacity", "[", "0.9", "]"}], ",", "Yellow", ",", "s2"}], 
+       "}"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"Show", "[", 
+    RowBox[{"P1", ",", "P2"}], "]"}], "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.6550727140583725`*^9, 3.6550729632131433`*^9}, {
+  3.655073034382493*^9, 3.655073068467618*^9}, {3.655073265070611*^9, 
+  3.655073422349742*^9}, {3.655073589023758*^9, 3.655073629718551*^9}, {
+  3.6550738211600294`*^9, 3.655073829879923*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[{
+   {RGBColor[1, 0.5, 0], Opacity[0.9], 
+    BSplineSurface3DBox[
+     NCache[{{{0, 0, 1}, {
+        Sin[Rational[1, 24] Pi], 0, Cos[Rational[1, 24] Pi]}}, {{0, 0, 1}, {
+        Cos[Rational[1, 24] Pi] Sin[Rational[1, 24] Pi], 
+         Sin[Rational[1, 24] Pi]^2, Cos[Rational[1, 24] Pi]}}, {{0, 0, 1}, {
+        Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2]) 
+         Sin[Rational[1, 24] Pi], Rational[1, 2] 
+         2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[1, 24] Pi], 
+         Cos[Rational[1, 24] Pi]}}, {{0, 0, 1}, {
+        Cos[Rational[1, 8] Pi] Sin[Rational[1, 24] Pi], 
+         Sin[Rational[1, 24] Pi] Sin[Rational[1, 8] Pi], Cos[
+         Rational[1, 24] Pi]}}}, {{{0, 0, 1}, {
+        0.13052619222005157`, 0, 0.9914448613738104}}, {{0, 0, 1}, {
+        0.12940952255126037`, 0.01703708685546585, 0.9914448613738104}}, {{0, 
+        0, 1}, {0.12607862007251905`, 0.033782664431261815`, 
+        0.9914448613738104}}, {{0, 0, 1}, {0.1205904774487396, 
+        0.049950211252314816`, 0.9914448613738104}}}]]}, 
+   {RGBColor[1, 1, 0], Opacity[0.9], 
+    BSplineSurface3DBox[
+     NCache[{{{Sin[Rational[1, 16] Pi], 0, Cos[Rational[1, 16] Pi]}, {
+        Sin[Rational[5, 48] Pi], 0, Cos[Rational[5, 48] Pi]}}, {{
+        Cos[Rational[1, 24] Pi] Sin[Rational[1, 16] Pi], 
+         Sin[Rational[1, 24] Pi] Sin[Rational[1, 16] Pi], Cos[
+         Rational[1, 16] Pi]}, {
+        Cos[Rational[1, 24] Pi] Sin[Rational[5, 48] Pi], 
+         Sin[Rational[1, 24] Pi] Sin[Rational[5, 48] Pi], Cos[
+         Rational[5, 48] Pi]}}, {{
+        Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2]) 
+         Sin[Rational[1, 16] Pi], Rational[1, 2] 
+         2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[1, 16] Pi], 
+         Cos[Rational[1, 16] Pi]}, {
+        Rational[1, 2] 2^Rational[-1, 2] (1 + 3^Rational[1, 2]) 
+         Sin[Rational[5, 48] Pi], Rational[1, 2] 
+         2^Rational[-1, 2] (-1 + 3^Rational[1, 2]) Sin[Rational[5, 48] Pi], 
+         Cos[Rational[5, 48] Pi]}}, {{
+        Cos[Rational[1, 8] Pi] Sin[Rational[1, 16] Pi], 
+         Sin[Rational[1, 16] Pi] Sin[Rational[1, 8] Pi], Cos[
+         Rational[1, 16] Pi]}, {
+        Cos[Rational[1, 8] Pi] Sin[Rational[5, 48] Pi], 
+         Sin[Rational[5, 48] Pi] Sin[Rational[1, 8] Pi], Cos[
+         Rational[5, 48] Pi]}}}, {{{
+        0.19509032201612825`, 0, 0.9807852804032304}, {
+        0.3214394653031616, 0, 0.9469301294951057}}, {{0.1934212972666523, 
+       0.025464396871748916`, 0.9807852804032304}, {0.31868950611756475`, 
+       0.04195626943527107, 0.9469301294951057}}, {{0.18844278049442906`, 
+       0.050493090852957584`, 0.9807852804032304}, {0.3104866811248726, 
+       0.08319465546802912, 0.9469301294951057}}, {{0.18023995550173696`, 
+       0.0746578340503426, 0.9807852804032304}, {0.2969713429349629, 
+       0.12300955787981306`, 0.9469301294951057}}}]]}},
+  ImageSize->{368.8216700420879, 205.49748129429858`},
+  ViewPoint->{1.7965693399005205`, -1.5665456380852443`, 2.40172300041564},
+  ViewVertical->{0.3889768219611446, 1.3004133046308182`, 
+   4.695746194787047}]], "Output",
+ CellChangeTimes->{{3.655072916184667*^9, 3.6550729646821957`*^9}, {
+   3.6550730501893387`*^9, 3.655073068889511*^9}, 3.655073296273904*^9, {
+   3.655073389350516*^9, 3.655073423271864*^9}, {3.6550735934802732`*^9, 
+   3.655073603443546*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{798, 808},
+WindowMargins->{{-7, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 7, 2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 704, 13, 161, "Subtitle"],
+Cell[CellGroupData[{
+Cell[1308, 39, 186, 6, 109, "Subsection"],
+Cell[1497, 47, 4552, 100, 414, "Text"],
+Cell[CellGroupData[{
+Cell[6074, 151, 1653, 42, 112, "Input"],
+Cell[7730, 195, 3532, 59, 170, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11299, 259, 3193, 90, 232, "Input"],
+Cell[14495, 351, 3378, 59, 220, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
